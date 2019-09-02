@@ -2,8 +2,6 @@
 # -*-: coding utf-8 -*-
 
 from hermes_python.hermes import Hermes
-import times_tables as tt
-import json
 
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
