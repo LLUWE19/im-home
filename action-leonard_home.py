@@ -13,8 +13,8 @@ MQTT_IP_ADDR = "192.168.0.136"
 MQTT_PORT = 1883
 MQTT_ADDR = "{}:{}".format(MQTT_IP_ADDR, str(MQTT_PORT))
 
-INTENT_IM_HOME = "i_am_home"
-INTENT_ANSWER = "give_answer"
+INTENT_IM_HOME = "LLUWE19:user_arrives_home"
+INTENT_ANSWER = "LLUWE19:give_answer"
 INTENT_INTERRUPT = "interrupt"
 INTENT_DOES_NOT_KNOW = "does_not_know"
 
