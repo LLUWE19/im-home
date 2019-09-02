@@ -20,7 +20,10 @@ SessionStates = {}
 
 def user_arrives_home(hermes, intent_message):
     print("User has arrived home")
-    user_gives_answer(hermes, intent_message)
+    global last_question
+    sentence = "welcome home... would you like the lights on"
+    last_question = sentence
+    hermes.publish_continue_session(intent_message.session_id, sentence)
 
 
 def user_gives_answer(hermes, intent_message):
@@ -32,24 +35,20 @@ def user_gives_answer(hermes, intent_message):
     if intent_message.slots.answer:
         answer = intent_message.slots.answer.first().value
 
-    if last_question is None:
-        sentence = "welcome home do you want the light on"
-        last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, ["LLUWE19:give_answer"])
-    elif last_question == "welcome home do you want the light on":
+    if last_question == "welcome home... would you like the lights on":
         if answer == "yes":
             print("Turning on the light")
         else:
             print("Leaving the light off")
-        sentence = "turned on the light do you want the tv on"
+        sentence = "okay... do you want the tv on"
         last_question = sentence
         hermes.publish_continue_session(session_id, sentence, ["LLUWE19:give_answer"])
-    elif last_question == "turned on the light do you want the tv on":
+    elif last_question == "okay... do you want the tv on":
         if answer == "yes":
             print("Turning on the tv")
         else:
             print("Leaving the tv off")
-        sentence = "thanks"
+        sentence = "okay... welcome home"
         last_question = sentence
         hermes.publish_end_session(session_id, sentence)
 
