@@ -35,7 +35,7 @@ def user_gives_answer(hermes, intent_message):
     if last_question is None:
         sentence = "welcome home do you want the light on"
         last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
+        hermes.publish_continue_session(session_id, sentence, ["LLUWE19:give_answer"])
     elif last_question == "welcome home do you want the light on":
         if answer == "yes":
             print("Turning on the light")
@@ -43,7 +43,7 @@ def user_gives_answer(hermes, intent_message):
             print("Leaving the light off")
         sentence = "turned on the light do you want the tv on"
         last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
+        hermes.publish_continue_session(session_id, sentence, ["LLUWE19:give_answer"])
     elif last_question == "turned on the light do you want the tv on":
         if answer == "yes":
             print("Turning on the tv")
