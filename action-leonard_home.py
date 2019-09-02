@@ -23,7 +23,7 @@ def user_arrives_home(hermes, intent_message):
     global last_question
     sentence = "welcome home... would you like the lights on"
     last_question = sentence
-    hermes.publish_continue_session(intent_message.session_id, sentence)
+    hermes.publish_continue_session(intent_message.session_id, sentence, ["LLUWE19:give_answer"])
 
 
 def user_gives_answer(hermes, intent_message):
