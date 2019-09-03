@@ -76,10 +76,10 @@ def user_gives_answer(hermes, intent_message):
             request = rq.post(url, data=json_body, headers=header)
         else:
             print("Leaving the light off")
-        sentence = "okay... do you want the tv on"
+        sentence = "okay... do you want the tee vee on"
         last_question = sentence
         hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
-    elif last_question == "okay... do you want the tv on":
+    elif last_question == "okay... do you want the tee vee on":
         if answer == "yes":
             print("Turning on the tv")
             url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
