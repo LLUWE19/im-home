@@ -76,10 +76,10 @@ def user_gives_answer(hermes, intent_message):
         print("The user answered: " + answer)
 
     if intent_message.slots.color:
-        color = intent_message.slots.color.first().value
+        light_color = intent_message.slots.color.first().value
 
     if intent_message.slots.percentage:
-        percentage = intent_message.slots.percentage.first().value
+        light_brightness = intent_message.slots.percentage.first().value
 
     if last_question == "welcome home... would you like the lights on":
         if answer == "yes":
@@ -91,22 +91,13 @@ def user_gives_answer(hermes, intent_message):
         last_question = sentence
         hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
 
-    if last_question == "okay... what color do you want the light" and light_on is True:
-        if color:
-            light_color = color
-            print("User responded with color")
-        else:
-            light_color = "white"
+    if last_question == "okay... what color do you want the light":
         sentence = "okay... how bright do you want the light"
         last_question = sentence
         hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
 
     if last_question == "okay... how bright do you want the light":
         print("User responded with brightness")
-        if percentage:
-            light_brightness = percentage
-        else:
-            light_brightness = 100
         sentence = "okay... did you want the tee vee on"
         last_question = sentence
         hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
