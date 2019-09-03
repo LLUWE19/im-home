@@ -126,7 +126,7 @@ def user_gives_answer(hermes, intent_message):
             body = {
                 "entity_id": "light.tall_lamp",
                 "color_name": light_color,
-                "brightness": light_brightness
+                "brightness_pct": light_brightness
             }
             json_body = json.dumps(body)
             print(json_body)
