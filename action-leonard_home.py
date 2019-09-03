@@ -145,8 +145,8 @@ with Hermes(MQTT_ADDR) as h:
 
     h.subscribe_intent(INTENT_IM_HOME, user_arrives_home) \
         .subscribe_intent(INTENT_ANSWER, user_gives_answer) \
-        .subscribe_intent(INTENT_COLOR, user_gives_answer()) \
-        .subscribe_intent(INTENT_PERCENTAGE, user_gives_answer()) \
+        .subscribe_intent(INTENT_COLOR, user_gives_answer) \
+        .subscribe_intent(INTENT_PERCENTAGE, user_gives_answer) \
         .start()
 
 
