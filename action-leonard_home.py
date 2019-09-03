@@ -12,7 +12,7 @@ MQTT_PORT = 1883
 MQTT_ADDR = "{}:{}".format(MQTT_IP_ADDR, str(MQTT_PORT))
 
 INTENT_IM_HOME = "LLUWE19:user_arrives_home"
-INTENT_ANSWER = "LLUWE19:give_answer"
+INTENT_ANSWER = "LLUWE19:user_gives_answer"
 
 last_question = None
 SessionStates = {}
@@ -23,7 +23,7 @@ def user_arrives_home(hermes, intent_message):
     global last_question
     sentence = "welcome home... would you like the lights on"
     last_question = sentence
-    hermes.publish_continue_session(intent_message.session_id, sentence, ["LLUWE19:give_answer"])
+    hermes.publish_continue_session(intent_message.session_id, sentence, [INTENT_ANSWER])
 
 
 def user_gives_answer(hermes, intent_message):
@@ -42,7 +42,7 @@ def user_gives_answer(hermes, intent_message):
             print("Leaving the light off")
         sentence = "okay... do you want the tv on"
         last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, ["LLUWE19:give_answer"])
+        hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
     elif last_question == "okay... do you want the tv on":
         if answer == "yes":
             print("Turning on the tv")
