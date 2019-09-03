@@ -129,6 +129,7 @@ def user_gives_answer(hermes, intent_message):
                 "brightness": light_brightness
             }
             json_body = json.dumps(body)
+            print(json_body)
             request = rq.post(url, data=json_body, headers=header)
 
         if tv_on:
