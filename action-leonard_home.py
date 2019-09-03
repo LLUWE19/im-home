@@ -125,25 +125,24 @@ def user_gives_answer(hermes, intent_message):
             url = 'http://192.168.0.136:8123/api/services/light/turn_on'
             body = {
                 "entity_id": "light.tall_lamp",
-                "color": light_color,
+                "color_name": light_color,
                 "brightness": light_brightness
             }
             json_body = json.dumps(body)
             print(json_body)
             request = rq.post(url, data=json_body, headers=header)
 
+        if tv_on:
+            print("Turning on the tv")
+            url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
+            body = {
+                "entity_id": "switch.living_room_tv"
+            }
+            json_body = json.dumps(body)
+            request = rq.post(url, data=json_body, headers=header)
 
-        # if tv_on:
-        #     print("Turning on the tv")
-        #     url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
-        #     body = {
-        #         "entity_id": "switch.living_room_tv"
-        #     }
-        #     json_body = json.dumps(body)
-        #     request = rq.post(url, data=json_body, headers=header)
-        #
-        # last_question = sentence
-        # hermes.publish_end_session(session_id, sentence)
+        last_question = sentence
+        hermes.publish_end_session(session_id, sentence)
 
 
 with Hermes(MQTT_ADDR) as h:
