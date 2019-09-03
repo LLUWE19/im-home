@@ -37,32 +37,36 @@ def read_configuration_file(configuration_file):
 
 
 def user_arrives_home(hermes, intent_message):
-    print("User has arrived home")
+    print("Intent callback: user arrived home.")
     global last_question
     sentence = "welcome home... would you like the lights on"
+    print("Set up home for user, last question: ", sentence)
     last_question = sentence
+    print("Continuing session")
     hermes.publish_continue_session(intent_message.session_id, sentence, [INTENT_ANSWER])
 
 
 def user_gives_answer(hermes, intent_message):
-    print("User is giving an answer")
+    print("User is giving an answer...")
+    print("Reading the config file")
     conf = read_configuration_file(CONFIGURATION_INI)
-    apiport = conf['secret']['http_api_port']
-    apihost = conf['secret']['http_api_hostname']
+    autho = conf['secret']['http_api_password']
+    print("The access token is: ",autho)
     header = {
         "Content-Type": "application/json",
-        "x-ha-access": conf['secret']['http_api_password']
+        'Authorization': autho
     }
     session_id = intent_message.session_id
 
     answer = None
     if intent_message.slots.answer:
         answer = intent_message.slots.answer.first().value
+        print("The user answered: ", answer)
 
     global last_question
     if last_question == "welcome home... would you like the lights on":
         if answer == "yes":
-            print("Turning on the light")
+            print("!!!!!!!Turning on the light!!!!!!!!!!!")
             url = 'http://192.168.0.136:8123/api/services/light/turn_on'
             body = {
                 "entity_id": "light.tall_lamp"
