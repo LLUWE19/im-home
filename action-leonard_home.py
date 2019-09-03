@@ -2,7 +2,9 @@
 # -*-: coding utf-8 -*-
 
 from hermes_python.hermes import Hermes
-
+import requests as rq
+import configparser
+import json
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIGURATION_INI = "config.ini"
@@ -16,6 +18,15 @@ INTENT_ANSWER = "LLUWE19:user_gives_answer"
 
 last_question = None
 SessionStates = {}
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+autho = config['secret']['api_password']  # Reading the api_password from the config file
+
+header = {
+    'Authorization': autho,
+    'content-type': 'application/json',
+}
 
 
 def user_arrives_home(hermes, intent_message):
@@ -38,6 +49,12 @@ def user_gives_answer(hermes, intent_message):
     if last_question == "welcome home... would you like the lights on":
         if answer == "yes":
             print("Turning on the light")
+            url = 'http://192.168.0.136:8123/api/services/light/turn_on'
+            body = {
+                "entity_id": "light.tall_lamp"
+            }
+            json_body = json.dumps(body)
+            request = rq.post(url, headers=header)
         else:
             print("Leaving the light off")
         sentence = "okay... do you want the tv on"
@@ -46,6 +63,12 @@ def user_gives_answer(hermes, intent_message):
     elif last_question == "okay... do you want the tv on":
         if answer == "yes":
             print("Turning on the tv")
+            url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
+            body = {
+                "entity_id": "switch.living_room_tv"
+            }
+            json_body = json.dumps(body)
+            request = rq.post(url, headers=header)
         else:
             print("Leaving the tv off")
         sentence = "okay... welcome home"
