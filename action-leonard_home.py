@@ -3,8 +3,9 @@
 
 from hermes_python.hermes import Hermes
 import requests as rq
-import configparser
+import ConfigParser
 import json
+import io
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIGURATION_INI = "config.ini"
@@ -19,14 +20,20 @@ INTENT_ANSWER = "LLUWE19:user_gives_answer"
 last_question = None
 SessionStates = {}
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-autho = config['secret']['api_password']  # Reading the api_password from the config file
 
-header = {
-    'Authorization': autho,
-    'content-type': 'application/json',
-}
+class SnipsConfigParser(ConfigParser.SafeConfigParser):
+    def to_dict(self):
+        return {section: {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
+
+
+def read_configuration_file(configuration_file):
+    try:
+        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
+            conf_parser = SnipsConfigParser()
+            conf_parser.readfp(f)
+            return conf_parser.to_dict()
+    except (IOError, ConfigParser.Error) as e:
+        return dict()
 
 
 def user_arrives_home(hermes, intent_message):
@@ -39,13 +46,20 @@ def user_arrives_home(hermes, intent_message):
 
 def user_gives_answer(hermes, intent_message):
     print("User is giving an answer")
-    global last_question
-    answer = None
+    conf = read_configuration_file(CONFIGURATION_INI)
+    apiport = conf['secret']['http_api_port']
+    apihost = conf['secret']['http_api_hostname']
+    header = {
+        "Content-Type": "application/json",
+        "x-ha-access": conf['secret']['http_api_password']
+    }
     session_id = intent_message.session_id
 
+    answer = None
     if intent_message.slots.answer:
         answer = intent_message.slots.answer.first().value
 
+    global last_question
     if last_question == "welcome home... would you like the lights on":
         if answer == "yes":
             print("Turning on the light")
@@ -54,7 +68,7 @@ def user_gives_answer(hermes, intent_message):
                 "entity_id": "light.tall_lamp"
             }
             json_body = json.dumps(body)
-            request = rq.post(url, headers=header)
+            request = rq.post(url, data=json_body, headers=header)
         else:
             print("Leaving the light off")
         sentence = "okay... do you want the tv on"
@@ -68,7 +82,7 @@ def user_gives_answer(hermes, intent_message):
                 "entity_id": "switch.living_room_tv"
             }
             json_body = json.dumps(body)
-            request = rq.post(url, headers=header)
+            request = rq.post(url, data=json_body, headers=header)
         else:
             print("Leaving the tv off")
         sentence = "okay... welcome home"
