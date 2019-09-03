@@ -75,11 +75,11 @@ def user_gives_answer(hermes, intent_message):
         answer = intent_message.slots.answer.first().value
         print("The user answered: " + answer)
 
-    if intent_message.slots.color:
+    elif intent_message.slots.color:
         print("message with color")
         light_color = intent_message.slots.color.first().value
 
-    if intent_message.slots.percentage:
+    elif intent_message.slots.percentage:
         print("message with brightness")
         light_brightness = intent_message.slots.percentage.first().value
 
@@ -112,23 +112,25 @@ def user_gives_answer(hermes, intent_message):
             print("Leaving the tv off")
         sentence = "okay... welcome home"
 
-        print("Turning on the light")
-        url = 'http://192.168.0.136:8123/api/services/light/turn_on'
-        body = {
-            "entity_id": "light.tall_lamp",
-            "color": light_color,
-            "brightness": light_brightness
-        }
-        json_body = json.dumps(body)
-        request = rq.post(url, data=json_body, headers=header)
+        if light_on:
+            print("Turning on the light")
+            url = 'http://192.168.0.136:8123/api/services/light/turn_on'
+            body = {
+                "entity_id": "light.tall_lamp",
+                "color": light_color,
+                "brightness": light_brightness
+            }
+            json_body = json.dumps(body)
+            request = rq.post(url, data=json_body, headers=header)
 
-        print("Turning on the tv")
-        url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
-        body = {
-            "entity_id": "switch.living_room_tv"
-        }
-        json_body = json.dumps(body)
-        request = rq.post(url, data=json_body, headers=header)
+        if tv_on:
+            print("Turning on the tv")
+            url = 'http://192.168.0.136:8123/api/services/switch/turn_on'
+            body = {
+                "entity_id": "switch.living_room_tv"
+            }
+            json_body = json.dumps(body)
+            request = rq.post(url, data=json_body, headers=header)
 
         last_question = sentence
         hermes.publish_end_session(session_id, sentence)
