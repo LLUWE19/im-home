@@ -89,12 +89,12 @@ def user_gives_answer(hermes, intent_message):
             light_on = False
             sentence = "okay... did you want the tee vee on"
         last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
+        hermes.publish_continue_session(session_id, sentence, [INTENT_COLOR])
 
     if last_question == "okay... what color do you want the light":
         sentence = "okay... how bright do you want the light"
         last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
+        hermes.publish_continue_session(session_id, sentence, [INTENT_PERCENTAGE])
 
     if last_question == "okay... how bright do you want the light":
         print("User responded with brightness")
