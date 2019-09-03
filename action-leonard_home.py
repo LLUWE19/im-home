@@ -59,6 +59,12 @@ def user_gives_answer(hermes, intent_message):
     global tv_on
     global last_question
 
+    print("light_brightness: ", light_brightness)
+    print("light_color ", light_color)
+    print("light_on: ", light_on)
+    print("tv_on ", tv_on)
+    print("Last_question: ", last_question)
+
     print("User is giving an answer...")
     print("Reading the config file")
     conf = read_configuration_file(CONFIGURATION_INI)
@@ -75,11 +81,11 @@ def user_gives_answer(hermes, intent_message):
         answer = intent_message.slots.answer.first().value
         print("The user answered: " + answer)
 
-    elif intent_message.slots.color:
+    if intent_message.slots.color:
         print("message with color")
         light_color = intent_message.slots.color.first().value
 
-    elif intent_message.slots.percentage:
+    if intent_message.slots.percentage:
         print("message with brightness")
         light_brightness = intent_message.slots.percentage.first().value
 
@@ -87,11 +93,13 @@ def user_gives_answer(hermes, intent_message):
         if answer == "yes":
             light_on = True
             sentence = "okay... what color do you want the light"
+            last_question = sentence
+            hermes.publish_continue_session(session_id, sentence, [INTENT_COLOR])
         else:
             light_on = False
             sentence = "okay... did you want the tee vee on"
-        last_question = sentence
-        hermes.publish_continue_session(session_id, sentence, [INTENT_COLOR])
+            last_question = sentence
+            hermes.publish_continue_session(session_id, sentence, [INTENT_ANSWER])
 
     elif last_question == "okay... what color do you want the light":
         sentence = "okay... how bright do you want the light"
