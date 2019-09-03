@@ -51,17 +51,18 @@ def user_gives_answer(hermes, intent_message):
     print("Reading the config file")
     conf = read_configuration_file(CONFIGURATION_INI)
     autho = conf['secret']['http_api_password']
-    print("The access token is: ",autho)
+    print("The access token is: " + autho)
     header = {
+        'Authorization': autho,
         "Content-Type": "application/json",
-        'Authorization': autho
+
     }
     session_id = intent_message.session_id
 
     answer = None
     if intent_message.slots.answer:
         answer = intent_message.slots.answer.first().value
-        print("The user answered: ", answer)
+        print("The user answered: " + answer)
 
     global last_question
     if last_question == "welcome home... would you like the lights on":
